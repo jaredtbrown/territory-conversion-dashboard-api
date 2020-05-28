@@ -27,7 +27,7 @@ namespace TerritoryConversionDashboard.Factories
             return new TerritoryReportModel
             {
                 Total = trelloCards.Count(),
-                TotatCompleted = trelloCards.Count(x => x.IdList == _trelloApiConfig.CompletedListId),
+                TotalCompleted = trelloCards.Count(x => x.IdList == _trelloApiConfig.CompletedListId),
                 TotalInProgress = trelloCards.Count(x => x.IdList == _trelloApiConfig.InProgressListId),
                 TotalRemaining = trelloCards.Count(x => x.IdList == _trelloApiConfig.ToDoListId)
             };
