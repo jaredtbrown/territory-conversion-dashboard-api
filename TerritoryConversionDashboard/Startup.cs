@@ -40,7 +40,9 @@ namespace TerritoryConversionDashboard
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+            );
 
             app.UseAuthorization();
 
