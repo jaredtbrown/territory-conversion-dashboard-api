@@ -48,7 +48,8 @@ stages:
   jobs:
   - job: Deploy
     displayName: Deploy
-    pool: 'ubuntu-latest'
+    pool:
+      vmImage: 'ubuntu-latest'
 
     steps:
     - task: DownloadBuildArtifacts@0
