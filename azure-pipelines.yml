@@ -59,6 +59,11 @@ stages:
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
 
+    - task: FileTransform@2
+      inputs:
+        folderPath: '$(System.Artifacts)/drop/*.zip'
+        jsonTargetFiles: '**/appsettings.json'
+
     - task: AzureRmWebAppDeployment@4
       displayName: Deploy to web app
       inputs:
