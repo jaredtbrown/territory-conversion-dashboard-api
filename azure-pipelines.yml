@@ -1,4 +1,4 @@
-name: 'territory-conversion-api CI CasC'
+name: 'territory-conversion-api CasC'
 
 trigger:
 - master
