@@ -49,7 +49,7 @@ stages:
   - job: Deploy
     displayName: Deploy
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-2019'
 
     steps:
     - task: DownloadBuildArtifacts@0
