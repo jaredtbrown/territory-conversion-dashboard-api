@@ -42,3 +42,28 @@ stages:
         publishLocation: 'Container'
       condition: succeededOrFailed()
 
+- stage: Deploy
+  displayName: Deploy to Dev
+
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool: 'ubuntu-latest'
+
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: Deploy to web app
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Pay-As-You-Go(2ad2ac6e-ab8f-4785-a81e-872b6abbb71f)'
+        appType: 'webApp'
+        WebAppName: 'tfdev-territory-conversion-api'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
+        WebConfigParameters: '**/appsettings.json'
