@@ -1,5 +1,3 @@
-name: "territory-conversion-api CasC"
-
 pool:
   name: Azure Pipelines
 
