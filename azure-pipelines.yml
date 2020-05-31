@@ -62,7 +62,8 @@ stages:
     - task: FileTransform@2
       inputs:
         folderPath: '$(System.ArtifactsDirectory)/drop/*.zip'
-        jsonTargetFiles: './appsettings.json'
+        xmlTransformationRules: '' # There is a bug with this step that will say there was an error updating the file, even though the trasnform is successful. Putting in an empty string here fixes the issue.
+        jsonTargetFiles: '**/appsettings.json'
 
     - task: AzureRmWebAppDeployment@4
       displayName: Deploy to web app
