@@ -1,4 +1,4 @@
-name: 'territory-conversion-api CasC'
+name: 'territory-conversion-api CasC w/ environments'
 
 trigger:
 - master
@@ -46,34 +46,35 @@ stages:
   displayName: Deploy to Dev
 
   jobs:
-  - job: Deploy
-    displayName: Deploy
+  - deployment:
+    displayName: Deploy api
     pool:
       vmImage: 'windows-2019'
 
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
+    environment: Dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
 
-    - task: FileTransform@2
-      inputs:
-        folderPath: '$(System.ArtifactsDirectory)/drop/*.zip'
-        xmlTransformationRules: '' # There is a bug with this step that will say there was an error updating the file, even though the trasnform is successful. Putting in an empty string here fixes the issue.
-        jsonTargetFiles: '**/appsettings.json'
+          - task: FileTransform@2
+            inputs:
+              folderPath: '$(System.ArtifactsDirectory)/drop/*.zip'
+              xmlTransformationRules: '' # There is a bug with this step that will say there was an error updating the file, even though the trasnform is successful. Putting in an empty string here fixes the issue.
+              jsonTargetFiles: '**/appsettings.json'
 
-    - task: AzureRmWebAppDeployment@4
-      displayName: Deploy to web app
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Pay-As-You-Go(2ad2ac6e-ab8f-4785-a81e-872b6abbb71f)'
-        appType: 'webApp'
-        WebAppName: 'tfdev-territory-conversion-api'
-        packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
-        WebConfigParameters: '**/appsettings.json'
-
-
-    
+          - task: AzureRmWebAppDeployment@4
+            displayName: Deploy to web app
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Pay-As-You-Go(2ad2ac6e-ab8f-4785-a81e-872b6abbb71f)'
+              appType: 'webApp'
+              WebAppName: 'tfdev-territory-conversion-api'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
+              WebConfigParameters: '**/appsettings.json'
