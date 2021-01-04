@@ -15,9 +15,10 @@ namespace TerritoryConversionDashboard.Functions
         private readonly IReportService _reportService;
         private readonly ILogger _logger;
 
-        public ReportFunction(IReportService reportService)
+        public ReportFunction(IReportService reportService, ILogger logger)
         {
             _reportService = reportService;
+            _logger = logger;
         }
 
         public async Task HandleAsync(HttpContext context)
