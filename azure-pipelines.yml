@@ -67,5 +67,7 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: 'gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http'
+        script: |
+        gcloud config set project territory-conversion-dashboard
+        gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http
     
