@@ -74,7 +74,9 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: |
-            gcloud auth activate-service-account --key-file $(authkey.secureFilePath)
-            gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http
+        script: gcloud auth activate-service-account --key-file $(authkey.secureFilePath)
+
+    - task: CmdLine@2
+      inputs:
+        script: gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http
     
