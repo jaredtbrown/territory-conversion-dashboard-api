@@ -1,55 +1,22 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Google.Cloud.Functions.Hosting;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using TerritoryConversionDashboard.Factories;
+using System.Net.Http;
 
 namespace TerritoryConversionDashboard
 {
-    public class Startup
+    public class Startup : FunctionsStartup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
+        public override void ConfigureServices(WebHostBuilderContext context, IServiceCollection services) {
             services.AddHttpClient();
+
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITerritoryReportModelFactory, TerritoryReportModelFactory>();
 
-            var trelloApiSection = Configuration.GetSection("TrelloApi");
+            IConfigurationSection trelloApiSection = context.Configuration.GetSection("TrelloApi");
             services.Configure<TrelloApiConfig>(trelloApiSection);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-            );
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }

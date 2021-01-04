@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace TerritoryConversionDashboard.Functions
 {
-    [FunctionsStartup(typeof(NewStartup))]
+    [FunctionsStartup(typeof(Startup))]
     public class ReportFunction : IHttpFunction
     {
         private readonly IReportService _reportService;
