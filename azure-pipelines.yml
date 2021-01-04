@@ -53,6 +53,7 @@ stages:
 
     steps:
     - task: DownloadBuildArtifacts@0
+      displayName: 'Download build artifact'
       inputs:
         buildType: 'current'
         downloadType: 'single'
@@ -65,15 +66,20 @@ stages:
         xmlTransformationRules: '' # There is a bug with this step that will say there was an error updating the file, even though the trasnform is successful. Putting in an empty string here fixes the issue.
         jsonTargetFiles: '**/appsettings.json'
 
-    - task: AzureRmWebAppDeployment@4
-      displayName: Deploy to web app
+    - task: DownloadSecureFile@1
+      name: authkey
+      displayName: 'Download Service Account Key'
       inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Pay-As-You-Go(2ad2ac6e-ab8f-4785-a81e-872b6abbb71f)'
-        appType: 'webApp'
-        WebAppName: 'tfdev-territory-conversion-api'
-        packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
-        WebConfigParameters: '**/appsettings.json'
+        secureFile: 'google-service-account-key.json'
+        retryCount: '2'
 
+    - task: CmdLine@2
+      displayName: 'gcloud auth'
+      inputs:
+        script: gcloud auth activate-service-account --key-file $(authkey.secureFilePath)
 
+    - task: CmdLine@2
+      displayName: 'gcloud functions deploy'
+      inputs:
+        script: gcloud functions deploy report --entry-point TerritoryConversionDashboard.Functions.ReportFunction --runtime dotnet3 --trigger-http --project=territory-conversion-dashboard 
     
