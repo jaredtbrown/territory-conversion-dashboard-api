@@ -78,5 +78,5 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http --project=territory-conversion-dashboard
+        script: gcloud functions deploy territory-conversion-report --entry-point TerritoryConversionDashboard.Functions.ReportFunction --runtime dotnet3 --trigger-http
     
