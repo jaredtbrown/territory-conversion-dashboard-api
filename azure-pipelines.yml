@@ -53,6 +53,7 @@ stages:
 
     steps:
     - task: DownloadBuildArtifacts@0
+      displayName: 'Download build artifact'
       inputs:
         buildType: 'current'
         downloadType: 'single'
@@ -73,10 +74,12 @@ stages:
         retryCount: '2'
 
     - task: CmdLine@2
+      displayName: 'gcloud auth'
       inputs:
         script: gcloud auth activate-service-account --key-file $(authkey.secureFilePath)
 
     - task: CmdLine@2
+      displayName: 'gcloud functions deploy'
       inputs:
         script: gcloud functions deploy report --entry-point TerritoryConversionDashboard.Functions.ReportFunction --runtime dotnet3 --trigger-http --project=territory-conversion-dashboard 
     
