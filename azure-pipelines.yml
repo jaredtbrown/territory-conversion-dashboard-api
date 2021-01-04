@@ -65,9 +65,16 @@ stages:
         xmlTransformationRules: '' # There is a bug with this step that will say there was an error updating the file, even though the trasnform is successful. Putting in an empty string here fixes the issue.
         jsonTargetFiles: '**/appsettings.json'
 
+    - task: DownloadSecureFile@1
+      name: authkey
+      displayName: 'Download Service Account Key'
+      inputs:
+        secureFile: 'google-service-account-key.json'
+        retryCount: '2'
+
     - task: CmdLine@2
       inputs:
         script: |
-        gcloud config set project territory-conversion-dashboard
+        gcloud auth activate-service-account --key-file $(authkey.secureFilePath)
         gcloud functions deploy territory-conversion-report --entry-point report --runtime dotnet3 --trigger-http
     
