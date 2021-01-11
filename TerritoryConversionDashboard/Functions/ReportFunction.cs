@@ -13,18 +13,14 @@ namespace TerritoryConversionDashboard.Functions
     public class ReportFunction : IHttpFunction
     {
         private readonly IReportService _reportService;
-        private readonly ILogger _logger;
 
-        public ReportFunction(IReportService reportService, ILogger logger)
+        public ReportFunction(IReportService reportService)
         {
             _reportService = reportService;
-            _logger = logger;
         }
 
         public async Task HandleAsync(HttpContext context)
         {
-            try
-            {
                 var response = context.Response;
                 response.Headers.Append("Access-Control-Allow-Origin", "*");
                 switch (context.Request.Method)
@@ -39,11 +35,6 @@ namespace TerritoryConversionDashboard.Functions
                         response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
                         break;
                 }
-
-            } catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-            }
         }
     }
 }
