@@ -32,6 +32,7 @@ namespace TerritoryConversionDashboard.Functions
                         var report = await _reportService.GetAsync();
                         response.StatusCode = (int)HttpStatusCode.OK;
                         response.ContentType = "application/json";
+                        response.Headers.Append("Access-Control-Allow-Origin", "*");
                         await response.WriteAsync(JsonConvert.SerializeObject(report));
                         break;
                     default:
